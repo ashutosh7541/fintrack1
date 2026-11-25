@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>FinTrack — Personal Finance</title>
+  <link rel="stylesheet" href="/style.css?v=3">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<section id="authScreen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand"><div class="brand-mark">₹</div><div><h1>FinTrack</h1><p>Your money, in focus.</p></div></div>
+    <div class="auth-intro"><span class="eyebrow">PERSONAL FINANCE, ORGANIZED</span><h2 id="authTitle">Welcome back</h2><p id="authSubtitle">Log in to access your personal finance dashboard.</p></div>
+    <form id="loginForm" class="auth-form">
+      <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Enter your password" required></label>
+      <button class="button primary full-width" type="submit">Log in</button>
+      <p class="auth-switch">New to FinTrack? <button type="button" class="text-button" id="showSignup">Create an account</button></p>
+    </form>
+    <form id="signupForm" class="auth-form" hidden>
+      <label>Full name<input name="name" autocomplete="name" maxlength="60" placeholder="Your name" minlength="2" required></label>
+      <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+      <label>Password<input name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters" required></label>
+      <button class="button primary full-width" type="submit">Create account</button>
+      <p class="auth-switch">Already have an account? <button type="button" class="text-button" id="showLogin">Log in</button></p>
+    </form>
+    <p id="authMessage" class="auth-message" role="status"></p>
+    <p class="auth-note">Your account keeps your transactions, budgets and savings goals separate from other users on this computer.</p>
+  </div>
+</section>
+<div class="app-shell" id="appShell" hidden>
+  <aside class="sidebar">
+    <a class="sidebar-brand" href="#overview"><span class="sidebar-logo">₹</span><span><b>FinTrack</b><small>PERSONAL FINANCE</small></span></a>
+    <p class="nav-caption">WORKSPACE</p>
+    <nav class="side-nav" aria-label="Main navigation">
+      <a class="nav-link active" href="#overview"><span>▦</span> Overview</a>
+      <a class="nav-link" href="#analytics"><span>◷</span> Analytics</a>
+      <a class="nav-link" href="#ml-insights"><span>✦</span> ML Intelligence</a>
+      <a class="nav-link" href="#transactions"><span>⇄</span> Transactions</a>
+      <a class="nav-link" href="#budgets"><span>▤</span> Budgets</a>
+      <a class="nav-link" href="#goals"><span>◎</span> Savings goals</a>
+      <a class="nav-link" href="#assistant"><span>✧</span> AI assistant</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-tip"><span class="tip-icon">✦</span><b>Small steps add up.</b><p>Track your spending today to make better money decisions tomorrow.</p></div>
+      <div class="sidebar-foot">YOUR MONEY, IN FOCUS.</div>
+    </div>
+  </aside>
+  <main class="main-content">
+  <header class="topbar" id="overview">
+    <div class="brand"><div class="brand-mark">₹</div><div><h1>FinTrack</h1><p>Your money, in focus.</p></div></div>
+    <div class="top-actions"><input id="monthPicker" type="month" aria-label="Select month"><button class="button primary" id="addTransactionBtn">＋ Add transaction</button><div class="account-control"><span id="accountName"></span><button class="button subtle" id="logoutBtn" type="button">Log out</button></div></div>
+  </header>
+
+  <section class="welcome-row">
+    <div><span class="welcome-kicker">YOUR FINANCIAL OVERVIEW</span><h2>Make every rupee count.</h2><p>A clearer picture of your money starts here.</p></div>
+    <div class="welcome-date"><span class="date-dot"></span><span>PERSONAL FINANCE DASHBOARD</span></div>
+  </section>
+
+  <section class="stats-grid">
+    <article class="stat-card"><span>Total income</span><strong class="positive" id="income">₹0</strong><small>Income this month</small></article>
+    <article class="stat-card"><span>Total expenses</span><strong class="negative" id="expenses">₹0</strong><small>Expenses this month</small></article>
+    <article class="stat-card"><span>Net cash flow</span><strong id="balance">₹0</strong><small>Income minus expenses</small></article>
+    <article class="stat-card"><span>Savings rate</span><strong id="savingsRate">0%</strong><small>Of monthly income</small></article>
+  </section>
+
+  <section class="dashboard-grid" id="analytics">
+    <article class="panel"><div class="panel-heading"><h2>Spending breakdown</h2><span class="muted" id="chartMonth"></span></div><div class="chart-box"><canvas id="categoryChart"></canvas><p class="empty-chart" id="chartEmpty">Add expenses to see your spending breakdown.</p></div></article>
+    <article class="panel"><div class="panel-heading"><h2>Six-month cash flow</h2><span class="pill">Overview</span></div><div class="chart-box"><canvas id="flowChart"></canvas></div></article>
+  </section>
+
+
+  <section class="panel" id="ml-insights">
+    <div class="panel-heading">
+      <div><h2>FinTrack ML Intelligence</h2><p class="muted">Trained models for expense prediction, unusual-spend detection and spending-pattern analysis.</p></div>
+      <button class="button primary" id="runMlBtn" type="button">Run ML analysis</button>
+    </div>
+    <div class="ml-grid">
+      <article class="ml-card"><span class="ml-label">SPENDING PROFILE</span><strong id="mlProfile">Run analysis to classify your pattern</strong></article>
+      <article class="ml-card"><span class="ml-label">MODEL QUALITY</span><strong id="mlMetrics">Model metrics will appear here</strong></article>
+      <article class="ml-card"><span class="ml-label">DATA USED</span><strong id="mlData">Awaiting analysis</strong></article>
+    </div>
+    <div class="ml-columns">
+      <div><h3>Expense title categorisation</h3><div id="mlCategories" class="ml-results"><p class="muted">Run analysis to classify transaction descriptions.</p></div></div>
+      <div><h3>Predicted next-month expenses</h3><div id="mlForecast" class="ml-results"><p class="muted">Run analysis. Personalised forecasts require at least two months of records.</p></div></div>
+      <div><h3>Unusual transactions to review</h3><div id="mlAnomalies" class="ml-results"><p class="muted">No analysis run yet.</p></div></div>
+    </div>
+    <div><h3>Adaptive budget suggestions</h3><div id="mlBudgets" class="ml-results"><p class="muted">Suggestions will use your recent transaction history.</p></div></div>
+    <p class="disclaimer">Expense categories use TF-IDF + Logistic Regression; forecasting uses Random Forest and is compared with a three-month-average baseline; anomaly screening uses Isolation Forest. Synthetic evaluation metrics are not personal accuracy guarantees. Anomaly flags are review prompts, not fraud claims.</p>
+    <p id="mlError" class="auth-message" role="status"></p>
+  </section>
+
+  <section class="content-grid" id="transactions">
+    <article class="panel transactions-panel"><div class="panel-heading"><h2>Transactions</h2><button class="button subtle" id="refreshBtn">Refresh</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Transaction</th><th>Category</th><th>Date</th><th>Amount</th><th></th></tr></thead><tbody id="transactionRows"></tbody></table></div>
+      <p class="empty-state" id="transactionEmpty">No transactions for this month yet. Add your first one.</p>
+    </article>
+    <div class="side-stack">
+      <article class="panel" id="budgets"><div class="panel-heading"><h2>Monthly budgets</h2><button class="button subtle" id="addBudgetBtn">＋ Add</button></div><div id="budgetList"></div></article>
+      <article class="panel" id="goals"><div class="panel-heading"><h2>Savings goals</h2><button class="button subtle" id="addGoalBtn">＋ Add</button></div><div id="goalList"></div></article>
+      <article class="panel privacy-panel"><div class="panel-heading"><h2>Data & privacy</h2><span class="pill">Local JSON</span></div><p>Your records are stored in a JSON file on this computer. FinTrack does not connect to your bank. If an OpenAI API key is configured, chatbot messages send this account’s current-month financial snapshot, including transaction notes, to OpenAI.</p><a class="button subtle link-button" href="/api/export">Export data backup</a></article>
+    </div>
+  </section>
+
+  <section class="panel chatbot-panel" id="assistant">
+    <div class="panel-heading"><div><h2>FinTrack AI Assistant</h2><p class="muted">Ask questions about your recorded spending, budgets and savings goals.</p></div><span class="ai-status">● Assistant ready</span></div>
+    <div class="chat-suggestions"><button class="suggestion">Give me my monthly summary</button><button class="suggestion">Where am I spending the most?</button><button class="suggestion">How can I save more?</button></div>
+    <div class="chat-log" id="chatLog" aria-live="polite"><div class="chat-message assistant"><b>FinTrack Assistant</b><p>Hi! I can help you understand your recorded finances. Ask me about your spending, budgets or savings goals.</p></div></div>
+    <form class="chat-form" id="chatForm"><input id="chatInput" maxlength="1500" placeholder="Ask FinTrack Assistant..." autocomplete="off" required><button class="button primary" id="chatSend">Send</button></form>
+    <p class="disclaimer">With an OpenAI key, current-month transaction details (including titles and notes), budgets and goals are sent to OpenAI when you chat. Without a key, local fallback is used. Informational only; never share passwords, OTPs, UPI PINs or card PINs.</p>
+  </section>
+  <footer>FinTrack · Personal finance dashboard · Local records; optional OpenAI chatbot data sharing</footer>
+  </main>
+</div>
+
+<dialog id="transactionDialog" class="modal"><form id="transactionForm" class="modal-card"><div class="modal-heading"><h2>Add transaction</h2><button type="button" class="icon-button" data-close="transactionDialog">×</button></div>
+  <label>Title<input name="title" required maxlength="80" placeholder="e.g. Monthly salary"></label>
+  <div class="form-row"><label>Amount (₹)<input name="amount" type="number" min="1" step="0.01" required></label><label>Type<select name="type"><option value="expense">Expense</option><option value="income">Income</option></select></label></div>
+  <div class="form-row"><label>Category<select name="category"><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Education</option><option>Health</option><option>Entertainment</option><option>Salary</option><option>Freelance</option><option>Other</option></select></label><label>Date<input name="date" type="date" id="transactionDate" required></label></div>
+  <label>Note (optional)<input name="note" maxlength="200"></label><button class="button primary full-width">Save transaction</button>
+</form></dialog>
+
+<dialog id="budgetDialog" class="modal"><form id="budgetForm" class="modal-card"><div class="modal-heading"><h2>Set monthly budget</h2><button type="button" class="icon-button" data-close="budgetDialog">×</button></div>
+  <label>Category<select name="category"><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Education</option><option>Health</option><option>Entertainment</option><option>Other</option></select></label>
+  <div class="form-row"><label>Limit (₹)<input name="limit" type="number" min="1" required></label><label>Month<input name="month" type="month" id="budgetMonth" required></label></div><button class="button primary full-width">Save budget</button>
+</form></dialog>
+
+<dialog id="goalDialog" class="modal"><form id="goalForm" class="modal-card"><div class="modal-heading"><h2>Create savings goal</h2><button type="button" class="icon-button" data-close="goalDialog">×</button></div>
+  <label>Goal name<input name="name" required maxlength="80" placeholder="e.g. New laptop"></label>
+  <div class="form-row"><label>Target amount (₹)<input name="target" type="number" min="1" required></label><label>Target date<input name="deadline" type="date"></label></div><button class="button primary full-width">Create goal</button>
+</form></dialog>
+<div id="toast" class="toast" role="status"></div>
+<script src="/app.js"></script>
+</body></html>
