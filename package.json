@@ -1,0 +1,15 @@
+{
+  "name": "fintrack-organized",
+  "version": "2.0.0",
+  "private": true,
+  "description": "FinTrack personal finance application with hybrid Python machine-learning insights, per-user JSON storage and optional OpenAI assistant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --check server.js && node --check public/app.js && python3 -m py_compile ml/ml_engine.py && python3 ml/tests/smoke_test.py"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
